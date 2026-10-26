@@ -15,6 +15,7 @@ spec:
             prefix: /oidc/idpresponse
       rewrite:
         uri: /oidc/idpresponse
+        authority: ${config.EXT_AUTH_HOST}
       route:
         - destination:
             host: ${config.EXT_AUTH_HOST}
@@ -23,5 +24,10 @@ spec:
           headers:
             request:
               set:
-                Host: ${config.EXT_AUTH_HOST}
                 X-OIDC-RedirectURI: ${config.REDIRECT_URI}
+                # Host becomes ezsso-auth's on this hop, so vouch for the
+                # browser's host with the authN's relay_secret. %REQ(:authority)%
+                # is read before the authority rewrite; "set" overwrites any
+                # value the client sent.
+                ezsso-oidc-forwarded-host: "%REQ(:authority)%"
+                ezsso-oidc-relay-secret: ${config.RELAY_SECRET}

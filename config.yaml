@@ -7,6 +7,8 @@ GW_NAME: default-gateway
 APP_NAME: ezsso
 EXT_AUTH_HOST: api.ezsso.me
 REDIRECT_URI: https://your-app.example.com/oidc/idpresponse
+# The authN's relay_secret (sent with the relayed IDP callback)
+RELAY_SECRET: change-me
 
 # Opt-in labels (all use ezsso-role):
 #   ezsso-role: client   - sidecar mode (app pods)

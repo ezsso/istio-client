@@ -47,7 +47,17 @@ Edit `config.yaml`:
 APP_NS: default
 APP_NAME: ezsso
 EXT_AUTH_HOST: api.ezsso.me
+RELAY_SECRET: <authN relay_secret>
 ```
+
+`RELAY_SECRET` is the authN's `relay_secret`. The IDP callback
+(`vs-idpresponse.yaml`) reaches ezsso-auth with its own `Host`, so the route
+adds the browser's host as `ezsso-oidc-forwarded-host` (`%REQ(:authority)%`,
+read before the authority rewrite) and vouches for it with
+`ezsso-oidc-relay-secret`. Both are `set`, overwriting anything the client
+sends. The secret ends up in the rendered VirtualService, so restrict who can
+read VirtualServices in the app namespace — or set `callback_host_check: "off"`
+in the authN instead.
 
 ### Create Secret
 
